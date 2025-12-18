@@ -970,6 +970,7 @@ const geo = new THREE.TubeGeometry(curve, tubularSegments, radius, radialSegment
       tailLen:0.40,
       feather:0.06,
       linger:0.95
+      cornerR: 2.0,   // 例：2.0 くらいから調整（スケール次第）
     });
     root.add(trailKyoudo.group);
     trailByPinId.set('p12_kyoudo', trailKyoudo);
