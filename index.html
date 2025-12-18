@@ -563,7 +563,7 @@ const geo = new THREE.TubeGeometry(curve, tubularSegments, radius, radialSegment
         // fade（半透明で残して消える）
         const f = (now - this._t0) / (this.linger * 1000);
         const k = Math.max(0.0, 1.0 - f);
-        this.mat.uniforms.uOpacity.value = 0.55 * k;
+        this.mat.uniforms.uOpacity.value = 0.75 * k;
         this.head.material.opacity = 0.9 * k;
 
         if (k <= 0.0){
