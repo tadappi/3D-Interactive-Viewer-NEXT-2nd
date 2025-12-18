@@ -973,7 +973,7 @@ const geo = new THREE.TubeGeometry(curve, tubularSegments, radius, radialSegment
 
     // ★方眼（XZ平面）を root 座標系に追加（ピン座標と同じ基準）
     if (!gridHelper){
-      gridHelper = createXZGrid({ range:60, step:10, y:15, opacity:0.22 });
+      gridHelper = createXZGrid({ range:60, step:10, y:8, opacity:0.22 });
       gridHelper.visible = gridWanted;
       root.add(gridHelper);
     }
