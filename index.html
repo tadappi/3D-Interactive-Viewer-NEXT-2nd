@@ -995,11 +995,11 @@ const geo = new THREE.TubeGeometry(curve, tubularSegments, radius, radialSegment
     // ===== ★光航跡：p12_kyoudo（ホバーで走る＋残光）=====
     const trailKyoudo = createLightTrailEmitter({
       // ★残光が消えきる前に次の光を出す
-      interval: 0.95,
-      maxSimul: 3,
+      interval: 1.5,
+      maxSimul: 2,
 
       // ★interval より長めにすると「残ってる段階で次」が自然に重なる
-      linger: 2.2,
+      linger: 1.8,
 
       start:[0,10,0],
       controls:[[18,10,-30]],
