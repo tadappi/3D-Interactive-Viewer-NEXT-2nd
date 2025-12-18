@@ -451,11 +451,46 @@
     }
 
     const curve = new THREE.CurvePath();
-    for (let i=0; i<pts.length-1; i++){
-      // 折れ線：直線セグメントをつなぐ
-      curve.add(new THREE.LineCurve3(pts[i], pts[i+1]));
-    }
-    if (curve.updateArcLengths) curve.updateArcLengths();
+
+if (cornerR > 0 && pts.length >= 3) {
+  let cur = pts[0].clone();
+
+  for (let i = 1; i < pts.length - 1; i++) {
+    const A = pts[i - 1], B = pts[i], C = pts[i + 1];
+
+    const v1 = A.clone().sub(B);
+    const v2 = C.clone().sub(B);
+    const l1 = v1.length();
+    const l2 = v2.length();
+
+    // ほぼ一直線や短すぎはR無しで続行
+    if (l1 < 1e-6 || l2 < 1e-6) continue;
+    v1.normalize(); v2.normalize();
+    const straight = (v1.dot(v2) < -0.999); // A-B-C がほぼ一直線
+    if (straight) continue;
+
+    const r = Math.min(cornerR, l1 * 0.45, l2 * 0.45);
+
+    const p1 = B.clone().add(v1.multiplyScalar(r)); // 角の手前
+    const p2 = B.clone().add(v2.multiplyScalar(r)); // 角の先
+
+    // 直線（cur→p1）
+    curve.add(new THREE.LineCurve3(cur.clone(), p1.clone()));
+    // 角だけR（p1→B→p2）
+    curve.add(new THREE.QuadraticBezierCurve3(p1, B, p2));
+
+    cur = p2.clone();
+  }
+
+  // 最後の直線
+  curve.add(new THREE.LineCurve3(cur.clone(), pts[pts.length - 1].clone()));
+} else {
+  // 従来の折れ線
+  for (let i=0; i<pts.length-1; i++){
+    curve.add(new THREE.LineCurve3(pts[i], pts[i+1]));
+  }
+}
+if (curve.updateArcLengths) curve.updateArcLengths();
 
 const geo = new THREE.TubeGeometry(curve, tubularSegments, radius, radialSegments, false);
 
